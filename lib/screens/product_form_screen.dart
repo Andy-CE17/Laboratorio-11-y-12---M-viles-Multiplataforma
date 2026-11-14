@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../app_state.dart';
 import '../widgets/dialogs.dart';
+import '../widgets/app_ui.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -107,105 +108,160 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final accent = appAccent(context);
     return CupertinoPageScaffold(
-      navigationBar: const CupertinoNavigationBar(middle: Text('Registrar')),
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text('Nuevo producto'),
+      ),
       child: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 10, 20, 28),
-          children: [
-            pageTitle(
-              'Nuevo producto',
-              subtitle: 'Completa los datos del registro',
-            ),
-            const SizedBox(height: 8),
-            const Text('Nombre', style: TextStyle(fontWeight: FontWeight.w600)),
-            const SizedBox(height: 6),
-            CupertinoTextField(
-              controller: _name,
-              placeholder: 'Nombre del producto',
-              padding: const EdgeInsets.all(14),
-            ),
-            const SizedBox(height: 18),
-            const Text(
-              'Precio (S/)',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 6),
-            CupertinoTextField(
-              controller: _price,
-              placeholder: '0.00',
-              keyboardType: const TextInputType.numberWithOptions(
-                decimal: true,
+        child: appContent(
+          maxWidth: 760,
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(22, 28, 22, 38),
+            children: [
+              sectionHeading(
+                'Registro',
+                'Nuevo producto',
+                subtitle: 'Completa la información para añadirlo al catálogo.',
               ),
-              padding: const EdgeInsets.all(14),
-            ),
-            const SizedBox(height: 18),
-            const Text(
-              'Categoría',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 6),
-            CupertinoButton(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
-              color: CupertinoColors.secondarySystemGroupedBackground,
-              onPressed: _chooseCategory,
-              child: Row(
-                children: [
-                  Text(
-                    _category,
-                    style: const TextStyle(color: CupertinoColors.label),
-                  ),
-                  const Spacer(),
-                  const Icon(CupertinoIcons.chevron_down, size: 18),
-                ],
-              ),
-            ),
-            const SizedBox(height: 18),
-            const Text(
-              'Descripción',
-              style: TextStyle(fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(height: 6),
-            CupertinoTextField(
-              controller: _description,
-              placeholder: 'Describe el producto',
-              maxLines: 3,
-              padding: const EdgeInsets.all(14),
-            ),
-            const SizedBox(height: 20),
-            CupertinoButton(
-              onPressed: _pickImage,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(CupertinoIcons.photo_on_rectangle),
-                  const SizedBox(width: 8),
-                  Text(
-                    _imageBytes == null
-                        ? 'Seleccionar imagen (opcional)'
-                        : 'Cambiar imagen',
-                  ),
-                ],
-              ),
-            ),
-            if (_imageBytes != null)
-              Center(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.memory(
-                    _imageBytes!,
-                    width: 120,
-                    height: 120,
-                    fit: BoxFit.cover,
-                  ),
+              const SizedBox(height: 24),
+              appCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        iconBadge(CupertinoIcons.cube_box, accent),
+                        const SizedBox(width: 13),
+                        const Text(
+                          'Información del producto',
+                          style: TextStyle(
+                            color: appInk,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 26),
+                    appField(
+                      label: 'Nombre',
+                      controller: _name,
+                      placeholder: 'Nombre del producto',
+                    ),
+                    const SizedBox(height: 19),
+                    appField(
+                      label: 'Precio (S/)',
+                      controller: _price,
+                      placeholder: '0.00',
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                    ),
+                    const SizedBox(height: 19),
+                    const Text(
+                      'Categoría',
+                      style: TextStyle(
+                        color: appInk,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 9),
+                    CupertinoButton(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 15,
+                      ),
+                      color: const Color(0xFFFAFBFD),
+                      borderRadius: BorderRadius.circular(13),
+                      onPressed: _chooseCategory,
+                      child: Row(
+                        children: [
+                          Text(
+                            _category,
+                            style: const TextStyle(color: appInk, fontSize: 15),
+                          ),
+                          const Spacer(),
+                          const Icon(
+                            CupertinoIcons.chevron_down,
+                            size: 17,
+                            color: appMuted,
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 19),
+                    appField(
+                      label: 'Descripción',
+                      controller: _description,
+                      placeholder: 'Describe el producto',
+                      maxLines: 3,
+                    ),
+                    const SizedBox(height: 23),
+                    GestureDetector(
+                      onTap: _pickImage,
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(21),
+                        decoration: BoxDecoration(
+                          color: accent.withValues(alpha: 0.05),
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: accent.withValues(alpha: 0.25),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            if (_imageBytes == null)
+                              iconBadge(
+                                CupertinoIcons.photo_on_rectangle,
+                                accent,
+                                size: 48,
+                              )
+                            else
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.memory(
+                                  _imageBytes!,
+                                  width: 100,
+                                  height: 100,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            const SizedBox(height: 11),
+                            Text(
+                              _imageBytes == null
+                                  ? 'Seleccionar imagen'
+                                  : 'Cambiar imagen',
+                              style: TextStyle(
+                                color: accent,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            const Text(
+                              'Opcional · JPG o PNG',
+                              style: TextStyle(color: appMuted, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 25),
+                    SizedBox(
+                      height: 50,
+                      child: CupertinoButton.filled(
+                        onPressed: _save,
+                        borderRadius: BorderRadius.circular(13),
+                        child: const Text('Guardar producto'),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            const SizedBox(height: 18),
-            CupertinoButton.filled(
-              onPressed: _save,
-              child: const Text('Guardar producto'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'app_state.dart';
 import 'screens/login_screen.dart';
+import 'widgets/app_ui.dart';
 
 void main() => runApp(const ProductApp());
 
@@ -18,7 +19,8 @@ class ProductApp extends StatelessWidget {
         theme: CupertinoThemeData(
           primaryColor: AppState.instance.accent,
           brightness: Brightness.light,
-          scaffoldBackgroundColor: CupertinoColors.systemGroupedBackground,
+          scaffoldBackgroundColor: appBackground,
+          barBackgroundColor: CupertinoColors.white,
         ),
         home: const LoginScreen(),
       ),

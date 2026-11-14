@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../app_state.dart';
 import '../widgets/dialogs.dart';
+import '../widgets/app_ui.dart';
 import 'login_screen.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -138,106 +139,148 @@ class ProfilePage extends StatelessWidget {
           animation: AppState.instance,
           builder: (context, _) {
             final state = AppState.instance;
-            return ListView(
-              children: [
-                pageTitle('Perfil y configuración'),
-                Center(
-                  child: CupertinoButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () => _pickAvatar(context),
-                    child: ClipOval(
-                      child: state.avatarBytes == null
-                          ? Image.asset(
-                              'assets/images/profile_avatar.png',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.memory(
-                              state.avatarBytes!,
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
+            return appContent(
+              maxWidth: 760,
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(22, 28, 22, 36),
+                children: [
+                  sectionHeading(
+                    'Cuenta',
+                    'Perfil y configuración',
+                    subtitle: 'Personaliza tu espacio de trabajo.',
+                  ),
+                  const SizedBox(height: 23),
+                  appCard(
+                    child: Column(
+                      children: [
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () => _pickAvatar(context),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: appAccent(context),
+                                width: 2,
+                              ),
                             ),
+                            child: ClipOval(
+                              child: state.avatarBytes == null
+                                  ? Image.asset(
+                                      'assets/images/profile_avatar.png',
+                                      width: 94,
+                                      height: 94,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.memory(
+                                      state.avatarBytes!,
+                                      width: 94,
+                                      height: 94,
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 11),
+                        Text(
+                          state.name,
+                          style: const TextStyle(
+                            color: appInk,
+                            fontSize: 22,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          state.email,
+                          style: const TextStyle(color: appMuted, fontSize: 14),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          'Toca la foto para cambiarla',
+                          style: TextStyle(
+                            color: appAccent(context),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Text(
-                  state.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                  const SizedBox(height: 22),
+                  const Text(
+                    'Preferencias',
+                    style: TextStyle(
+                      color: appInk,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  state.email,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: CupertinoColors.secondaryLabel),
-                ),
-                CupertinoListSection.insetGrouped(
-                  children: [
-                    CupertinoListTile(
-                      leading: const Icon(CupertinoIcons.pencil),
-                      title: const Text('Editar perfil'),
-                      trailing: const Icon(
-                        CupertinoIcons.chevron_forward,
-                        size: 16,
+                  const SizedBox(height: 8),
+                  CupertinoListSection.insetGrouped(
+                    children: [
+                      CupertinoListTile(
+                        leading: const Icon(CupertinoIcons.pencil),
+                        title: const Text('Editar perfil'),
+                        trailing: const Icon(
+                          CupertinoIcons.chevron_forward,
+                          size: 16,
+                        ),
+                        onTap: () => _editProfile(context),
                       ),
-                      onTap: () => _editProfile(context),
-                    ),
-                    CupertinoListTile(
-                      leading: const Icon(CupertinoIcons.bell),
-                      title: const Text('Notificaciones'),
-                      trailing: CupertinoSwitch(
-                        value: state.notificationsEnabled,
-                        onChanged: state.updateNotifications,
-                      ),
-                    ),
-                    CupertinoListTile(
-                      leading: const Icon(CupertinoIcons.paintbrush),
-                      title: const Text('Tema de color'),
-                      additionalInfo: Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: state.accent,
-                          shape: BoxShape.circle,
+                      CupertinoListTile(
+                        leading: const Icon(CupertinoIcons.bell),
+                        title: const Text('Notificaciones'),
+                        trailing: CupertinoSwitch(
+                          value: state.notificationsEnabled,
+                          onChanged: state.updateNotifications,
                         ),
                       ),
-                      trailing: const Icon(
-                        CupertinoIcons.chevron_forward,
-                        size: 16,
+                      CupertinoListTile(
+                        leading: const Icon(CupertinoIcons.paintbrush),
+                        title: const Text('Tema de color'),
+                        additionalInfo: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: state.accent,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        trailing: const Icon(
+                          CupertinoIcons.chevron_forward,
+                          size: 16,
+                        ),
+                        onTap: () => _chooseTheme(context),
                       ),
-                      onTap: () => _chooseTheme(context),
-                    ),
-                    CupertinoListTile(
-                      leading: const Icon(CupertinoIcons.info),
-                      title: const Text('Acerca de'),
-                      trailing: const Icon(
-                        CupertinoIcons.chevron_forward,
-                        size: 16,
+                      CupertinoListTile(
+                        leading: const Icon(CupertinoIcons.info),
+                        title: const Text('Acerca de'),
+                        trailing: const Icon(
+                          CupertinoIcons.chevron_forward,
+                          size: 16,
+                        ),
+                        onTap: () => showMessage(
+                          context,
+                          'Sistema de Productos',
+                          'Laboratorio 11. Versión Cupertino del laboratorio de la semana 8.',
+                        ),
                       ),
-                      onTap: () => showMessage(
-                        context,
-                        'Sistema de Productos',
-                        'Laboratorio 11. Versión Cupertino del laboratorio de la semana 8.',
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: CupertinoButton(
+                      onPressed: () => _logout(context),
+                      child: const Text(
+                        'Cerrar sesión',
+                        style: TextStyle(color: CupertinoColors.destructiveRed),
                       ),
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24),
-                  child: CupertinoButton(
-                    onPressed: () => _logout(context),
-                    child: const Text(
-                      'Cerrar sesión',
-                      style: TextStyle(color: CupertinoColors.destructiveRed),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             );
           },
         ),

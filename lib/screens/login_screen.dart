@@ -93,59 +93,79 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget _brandPanel(Color accent, {required bool tall}) => Container(
     constraints: BoxConstraints(minHeight: tall ? 540 : 190),
-    padding: EdgeInsets.all(tall ? 48 : 28),
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [accent, Color.lerp(accent, appInk, 0.48)!],
+    decoration: const BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage('assets/images/catalog_hero.jpg'),
+        fit: BoxFit.cover,
+        alignment: Alignment.centerRight,
       ),
     ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          width: 58,
-          height: 58,
-          decoration: BoxDecoration(
-            color: const Color(0x32FFFFFF),
-            borderRadius: BorderRadius.circular(17),
-          ),
-          child: const Icon(
-            CupertinoIcons.cube_box_fill,
-            color: CupertinoColors.white,
-            size: 28,
-          ),
+    child: Container(
+      padding: EdgeInsets.all(tall ? 48 : 28),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+          colors: [
+            Color.lerp(
+              accent,
+              appInk,
+              0.34,
+            )!.withValues(alpha: tall ? 0.91 : 0.82),
+            appInk.withValues(alpha: tall ? 0.64 : 0.31),
+          ],
         ),
-        SizedBox(height: tall ? 35 : 18),
-        const Text(
-          'Sistema de Productos',
-          style: TextStyle(
-            color: CupertinoColors.white,
-            fontSize: 31,
-            fontWeight: FontWeight.w700,
-            letterSpacing: -0.7,
-          ),
-        ),
-        const SizedBox(height: 10),
-        const Text(
-          'Organiza tu catálogo con una experiencia clara y sencilla.',
-          style: TextStyle(color: Color(0xDFFFFFFF), fontSize: 15, height: 1.5),
-        ),
-        if (tall) ...[
-          const SizedBox(height: 48),
-          const Text(
-            'LABORATORIO 11  ·  FLUTTER CUPERTINO',
-            style: TextStyle(
-              color: Color(0xBFFFFFFF),
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 1.4,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 58,
+            height: 58,
+            decoration: BoxDecoration(
+              color: const Color(0x32FFFFFF),
+              borderRadius: BorderRadius.circular(17),
+            ),
+            child: const Icon(
+              CupertinoIcons.cube_box_fill,
+              color: CupertinoColors.white,
+              size: 28,
             ),
           ),
+          SizedBox(height: tall ? 35 : 18),
+          const Text(
+            'Sistema de Productos',
+            style: TextStyle(
+              color: CupertinoColors.white,
+              fontSize: 31,
+              fontWeight: FontWeight.w700,
+              letterSpacing: -0.7,
+            ),
+          ),
+          const SizedBox(height: 10),
+          const Text(
+            'Organiza tu catálogo con una experiencia clara y sencilla.',
+            style: TextStyle(
+              color: Color(0xDFFFFFFF),
+              fontSize: 15,
+              height: 1.5,
+            ),
+          ),
+          if (tall) ...[
+            const SizedBox(height: 48),
+            const Text(
+              'LABORATORIO 11  ·  FLUTTER CUPERTINO',
+              style: TextStyle(
+                color: Color(0xBFFFFFFF),
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.4,
+              ),
+            ),
+          ],
         ],
-      ],
+      ),
     ),
   );
 
